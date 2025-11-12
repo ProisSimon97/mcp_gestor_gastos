@@ -1,0 +1,22 @@
+
+base_url: "http://localhost:8080"
+endpoints:
+  balance:
+    balance: "/balance/balance"
+    mensual: "/balance/mes/{ano}-{mes}"
+    acumulado: "/balance/acumulado"
+  categorias:
+    crear: "/categorias/crear"
+    listar: "/categorias/listar"
+  estadisticas:
+    tendencias_mes: "/estadisticas/tendencias-mes"
+    proyeccion_mes_siguiente: "/estadisticas/proyeccion-mes-siguiente"
+  gasto_fijo:
+    crear: "/gasto-fijo/crear"
+    listar: "/gasto-fijo/listar"
+    crear_movimientos: "/gasto-fijo/crear-movimientos"
+  movimientos:
+    crear: "/movimientos/crear"
+    buscar_por_categoria: "/movimientos/buscar-por-categoria"
+    buscar_por_fechas: "/movimientos/buscar-por-fechas"
+    actualizar: "/movimientos/actualizar"
