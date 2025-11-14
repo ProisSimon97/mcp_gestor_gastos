@@ -139,8 +139,28 @@ async def gasto_fijo_crear(monto: float, categoria_id: int, dia_cobro: int, acti
     Crea un gasto fijo mensual (dia_cobro 1-31).
     Contexto: registrar costos recurrentes (alquiler, servicios, suscripciones).
     """
-    payload = GastoFijoCreate(monto=monto, categoria_id=categoria_id, dia_cobro=dia_cobro, activo=activo, nota=nota).model_dump(exclude_none=True)
+    # Obtener el nombre de la categoría
     async with await _client() as client:
+        categorias_resp = await client.get(_path("categorias", "listar"))
+        categorias_resp.raise_for_status()
+        categorias = categorias_resp.json()
+        categoria_obj = next((c for c in categorias if c["id"] == categoria_id), None)
+        if not categoria_obj:
+            raise ValueError(f"Categoría con ID {categoria_id} no encontrada")
+        
+        # Construir el payload en el formato que espera el backend
+        payload = {
+            "monto": monto,
+            "categoria": {
+                "id": categoria_id,
+            },
+            "diaCobro": dia_cobro,
+            "activo": activo,
+            "nota": nota
+        }
+        # Remover campos None
+        payload = {k: v for k, v in payload.items() if v is not None}
+        
         resp = await client.post(_path("gasto_fijo", "crear"), json=payload)
     resp.raise_for_status()
     return resp.json()
